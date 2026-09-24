@@ -10,6 +10,8 @@
     <div class="container" style="margin:40px;">
         <h1 class="display-4">🎮 Game Collection</h1>
 
+        <a href="/games/create" class="btn btn-success mb-3">🎮 Add Game</a>
+
         <table class="table">
             <thead class="thead-dark">
                 <tr>
