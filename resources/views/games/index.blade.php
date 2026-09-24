@@ -14,6 +14,7 @@
                 <th>Platform</th>
                 <th>Genre</th>
                 <th>Rating</th>
+                <th>Show</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -33,7 +34,15 @@
                     <td>{{ $game->rating }}/10</td>
 
                     <td>
-                        <a href="/games/edit/{{ $game->id }}" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="/games/show/{{ $game->id }}" class="btn btn-info btn-sm">
+                            Show
+                        </a>
+                    </td>
+
+                    <td>
+                        <a href="/games/edit/{{ $game->id }}" class="btn btn-primary btn-sm">
+                            Edit
+                        </a>
                     </td>
 
                     <td>
@@ -58,6 +67,7 @@
                     </strong>
                 </td>
 
+                <td></td>
                 <td></td>
                 <td></td>
             </tr>

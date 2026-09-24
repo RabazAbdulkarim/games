@@ -51,9 +51,11 @@ class GameController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $game = Game::find($id);
+
+        return view('games.show', ['game' => $game]);
     }
 
     /**
@@ -62,6 +64,7 @@ class GameController extends Controller
     public function edit($id)
     {
         $game = Game::find($id);
+
         return view('games.edit', ['game' => $game]);
     }
 
