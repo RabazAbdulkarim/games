@@ -5,17 +5,16 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RolePermissionController;
+use App\Http\Controllers\Admin\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Klant en admin mogen het game-overzicht bekijken
 Route::get('/games', [GameController::class, 'index'])
     ->middleware(['auth', 'role:admin|klant']);
 
-// Alleen admin mag games toevoegen, aanpassen en verwijderen
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/games/create', [GameController::class, 'create']);
     Route::post('/games/store', [GameController::class, 'store']);
@@ -24,7 +23,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/games/destroy/{id}', [GameController::class, 'destroy']);
 });
 
-// Beheeromgeving - alleen admin
 Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
@@ -68,7 +66,7 @@ Route::middleware(['auth', 'role:admin'])
         Route::delete('/roles/{role}', [RoleController::class, 'destroy'])
             ->name('roles.destroy');
 
-        // Permissies koppelen aan rollen
+        // Rol-permissies
         Route::get('/role-permissions', [RolePermissionController::class, 'index'])
             ->name('role-permissions.index');
 
@@ -92,6 +90,31 @@ Route::middleware(['auth', 'role:admin'])
             '/role-permissions/{roleId}/{permissionId}',
             [RolePermissionController::class, 'destroy']
         )->name('role-permissions.destroy');
+
+        // Gebruiker-rollen
+        Route::get('/user-roles', [UserRoleController::class, 'index'])
+            ->name('user-roles.index');
+
+        Route::get('/user-roles/create', [UserRoleController::class, 'create'])
+            ->name('user-roles.create');
+
+        Route::post('/user-roles', [UserRoleController::class, 'store'])
+            ->name('user-roles.store');
+
+        Route::get(
+            '/user-roles/{roleId}/{userId}/edit',
+            [UserRoleController::class, 'edit']
+        )->name('user-roles.edit');
+
+        Route::put(
+            '/user-roles/{roleId}/{userId}',
+            [UserRoleController::class, 'update']
+        )->name('user-roles.update');
+
+        Route::delete(
+            '/user-roles/{roleId}/{userId}',
+            [UserRoleController::class, 'destroy']
+        )->name('user-roles.destroy');
     });
 
 Route::get('/dashboard', function () {
