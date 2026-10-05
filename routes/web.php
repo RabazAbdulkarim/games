@@ -8,11 +8,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Iedereen mag games bekijken
-Route::get('/games', [GameController::class, 'index']);
+// Klant en admin mogen het game-overzicht bekijken
+Route::get('/games', [GameController::class, 'index'])
+    ->middleware(['auth', 'role:admin|klant']);
 
-// Alleen ingelogde gebruikers mogen games aanpassen
-Route::middleware('auth')->group(function () {
+// Alleen admin mag games toevoegen, aanpassen en verwijderen
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/games/create', [GameController::class, 'create']);
     Route::post('/games/store', [GameController::class, 'store']);
     Route::get('/games/edit/{id}', [GameController::class, 'edit']);
