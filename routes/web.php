@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\RolePermissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -66,6 +67,31 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::delete('/roles/{role}', [RoleController::class, 'destroy'])
             ->name('roles.destroy');
+
+        // Permissies koppelen aan rollen
+        Route::get('/role-permissions', [RolePermissionController::class, 'index'])
+            ->name('role-permissions.index');
+
+        Route::get('/role-permissions/create', [RolePermissionController::class, 'create'])
+            ->name('role-permissions.create');
+
+        Route::post('/role-permissions', [RolePermissionController::class, 'store'])
+            ->name('role-permissions.store');
+
+        Route::get(
+            '/role-permissions/{roleId}/{permissionId}/edit',
+            [RolePermissionController::class, 'edit']
+        )->name('role-permissions.edit');
+
+        Route::put(
+            '/role-permissions/{roleId}/{permissionId}',
+            [RolePermissionController::class, 'update']
+        )->name('role-permissions.update');
+
+        Route::delete(
+            '/role-permissions/{roleId}/{permissionId}',
+            [RolePermissionController::class, 'destroy']
+        )->name('role-permissions.destroy');
     });
 
 Route::get('/dashboard', function () {
@@ -73,9 +99,14 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
 Route::get('/geheim', function () {
